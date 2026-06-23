@@ -9,38 +9,160 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TodayRouteImport } from './routes/today'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as CreateRouteImport } from './routes/create'
+import { Route as AlbumRouteImport } from './routes/album'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MomentsIdRouteImport } from './routes/moments.$id'
+import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AlbumDateRouteImport } from './routes/album.$date'
 
+const TodayRoute = TodayRouteImport.update({
+  id: '/today',
+  path: '/today',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateRoute = CreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlbumRoute = AlbumRouteImport.update({
+  id: '/album',
+  path: '/album',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MomentsIdRoute = MomentsIdRouteImport.update({
+  id: '/moments/$id',
+  path: '/moments/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlbumDateRoute = AlbumDateRouteImport.update({
+  id: '/$date',
+  path: '/$date',
+  getParentRoute: () => AlbumRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/album': typeof AlbumRouteWithChildren
+  '/create': typeof CreateRoute
+  '/settings': typeof SettingsRoute
+  '/today': typeof TodayRoute
+  '/album/$date': typeof AlbumDateRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/moments/$id': typeof MomentsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/album': typeof AlbumRouteWithChildren
+  '/create': typeof CreateRoute
+  '/settings': typeof SettingsRoute
+  '/today': typeof TodayRoute
+  '/album/$date': typeof AlbumDateRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/moments/$id': typeof MomentsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/album': typeof AlbumRouteWithChildren
+  '/create': typeof CreateRoute
+  '/settings': typeof SettingsRoute
+  '/today': typeof TodayRoute
+  '/album/$date': typeof AlbumDateRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/moments/$id': typeof MomentsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/album'
+    | '/create'
+    | '/settings'
+    | '/today'
+    | '/album/$date'
+    | '/auth/login'
+    | '/moments/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/album'
+    | '/create'
+    | '/settings'
+    | '/today'
+    | '/album/$date'
+    | '/auth/login'
+    | '/moments/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/album'
+    | '/create'
+    | '/settings'
+    | '/today'
+    | '/album/$date'
+    | '/auth/login'
+    | '/moments/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlbumRoute: typeof AlbumRouteWithChildren
+  CreateRoute: typeof CreateRoute
+  SettingsRoute: typeof SettingsRoute
+  TodayRoute: typeof TodayRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  MomentsIdRoute: typeof MomentsIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/today': {
+      id: '/today'
+      path: '/today'
+      fullPath: '/today'
+      preLoaderRoute: typeof TodayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create': {
+      id: '/create'
+      path: '/create'
+      fullPath: '/create'
+      preLoaderRoute: typeof CreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/album': {
+      id: '/album'
+      path: '/album'
+      fullPath: '/album'
+      preLoaderRoute: typeof AlbumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +170,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/moments/$id': {
+      id: '/moments/$id'
+      path: '/moments/$id'
+      fullPath: '/moments/$id'
+      preLoaderRoute: typeof MomentsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/album/$date': {
+      id: '/album/$date'
+      path: '/$date'
+      fullPath: '/album/$date'
+      preLoaderRoute: typeof AlbumDateRouteImport
+      parentRoute: typeof AlbumRoute
+    }
   }
 }
 
+interface AlbumRouteChildren {
+  AlbumDateRoute: typeof AlbumDateRoute
+}
+
+const AlbumRouteChildren: AlbumRouteChildren = {
+  AlbumDateRoute: AlbumDateRoute,
+}
+
+const AlbumRouteWithChildren = AlbumRoute._addFileChildren(AlbumRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlbumRoute: AlbumRouteWithChildren,
+  CreateRoute: CreateRoute,
+  SettingsRoute: SettingsRoute,
+  TodayRoute: TodayRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  MomentsIdRoute: MomentsIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
